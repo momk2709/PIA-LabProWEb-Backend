@@ -1,0 +1,105 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Categoria {
+  id          Int     @id @default(autoincrement())
+  nombre      String  @db.VarChar(255)
+  descripcion String  @db.VarChar(255)
+  Curso       Curso[]
+}
+
+model Curso {
+  id            Int           @id @default(autoincrement())
+  nombre        String        @db.VarChar(255)
+  descripcion   String        @db.VarChar(255)
+  precio        Int
+  fecha_inicio  DateTime      @db.Timestamptz(6)
+  fecha_fin     DateTime      @db.Timestamptz(6)
+  categoria_id  Int
+  instructor_id Int
+  Categoria     Categoria     @relation(fields: [categoria_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Instructor    Instructor    @relation(fields: [instructor_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Inscripcion   Inscripcion[]
+}
+
+model Factura {
+  id                Int            @id @default(autoincrement())
+  usuario_id        Int
+  curso_id          Int
+  fecha             DateTime       @db.Timestamptz(6)
+  status_factura_id Int
+  rfc               String         @db.VarChar(255)
+  precio            Int
+  Status_Factura    Status_Factura @relation(fields: [status_factura_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Inscripcion       Inscripcion    @relation(fields: [usuario_id, curso_id], references: [usuario_id, curso_id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model Informe {
+  id       Int    @id @default(autoincrement())
+  nombre   String @db.VarChar(255)
+  telefono String @db.VarChar(50)
+  email    String @db.VarChar(255)
+  mensaje  String @db.VarChar(255)
+}
+
+model Inscripcion {
+  usuario_id        Int
+  curso_id          Int
+  fecha_inscripcion DateTime  @default(now()) @db.Timestamptz(6)
+  Factura           Factura[]
+  Curso             Curso     @relation(fields: [curso_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Usuario           Usuario   @relation(fields: [usuario_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([usuario_id, curso_id])
+}
+
+model Instructor {
+  id                     Int                      @id @default(autoincrement())
+  nombre                 String                   @db.VarChar(255)
+  email                  String                   @db.VarChar(255)
+  descripcion            String                   @db.VarChar(255)
+  telefono               String                   @db.VarChar(255)
+  Curso                  Curso[]
+  Instructorcalificacion Instructorcalificacion[]
+}
+
+model Instructorcalificacion {
+  usuario_id    Int
+  instructor_id Int
+  calificacion  Float
+  Instructor    Instructor @relation(fields: [instructor_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Usuario       Usuario    @relation(fields: [usuario_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([usuario_id, instructor_id])
+}
+
+model Rol {
+  id          Int       @id @default(autoincrement())
+  nombre      String    @db.VarChar(255)
+  descripcion String    @db.VarChar(255)
+  Usuario     Usuario[]
+}
+
+model Status_Factura {
+  id          Int       @id @default(autoincrement())
+  nombre      String    @db.VarChar(255)
+  descripcion String    @db.VarChar(255)
+  Factura     Factura[]
+}
+
+model Usuario {
+  id                     Int                      @id @default(autoincrement())
+  nombre                 String                   @db.VarChar(255)
+  email                  String                   @db.VarChar(255)
+  password               String                   @db.VarChar(255)
+  rol_id                 Int
+  Inscripcion            Inscripcion[]
+  Instructorcalificacion Instructorcalificacion[]
+  Rol                    Rol                      @relation(fields: [rol_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}

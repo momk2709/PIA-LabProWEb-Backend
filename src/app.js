@@ -5,20 +5,12 @@ const port = process.env.PORT;
 
 app.use(express.json());
 
-var baseDeDatos = [
-  {
-    nombre: "Emma",
-    email: "ejemplo@gmail.com",
-    contrasena: "perrito123",
-  },
-];
-
 app.post("/auth/register", (req, res) => {
   try {
     const { nombre, apellido, email, contrasena, confirmacionContrasena } =
       req.body;
     if (contrasena != confirmacionContrasena) {
-      throw new Error("Error 1");
+      throw new Error("Error ");
     }
     res.send(req.body);
   } catch (error) {
