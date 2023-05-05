@@ -1,28 +1,25 @@
-require("dotenv").config();
 const express = require("express");
+const cors = require("cors");
+require("dotenv").config();
+
 const app = express();
-const port = process.env.PORT;
 
+app.use(cors());
 app.use(express.json());
+app.use("/api", require("./routes"));
+app.use(express.urlencoded({ extended: true }));
 
-app.post("/auth/register", (req, res) => {
+const PORT = process.env.PORT || 3001;
+
+const start = () => {
   try {
-    const { nombre, apellido, email, contrasena, confirmacionContrasena } =
-      req.body;
-    if (contrasena != confirmacionContrasena) {
-      throw new Error("Error ");
-    }
-    res.send(req.body);
-  } catch (error) {
-    res.send(error.message);
-    console.log(error);
+    app.listen(PORT, () => {
+      console.log(`Server running on http://localhost:${PORT}`);
+    });
+  } catch (e) {
+    console.error(e);
+    process.exit(1);
   }
-});
+};
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
-
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
-});
+start();
