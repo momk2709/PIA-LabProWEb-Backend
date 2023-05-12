@@ -19,9 +19,12 @@
   },
   "homepage": "https://github.com/momk2709/PIA-LabProWEb#readme",
   "dependencies": {
+    "@prisma/client": "^4.13.0",
+    "bcrypt": "^5.1.0",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "express-validator": "^7.0.1",
     "fs": "^0.0.1-security"
   },
   "devDependencies": {

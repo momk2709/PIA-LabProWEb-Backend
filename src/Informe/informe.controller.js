@@ -1,6 +1,8 @@
+const createInforme = require("./informe.services");
 const contactUsController = async (req, res) => {
   try {
-    res.sendStatus(200);
+    const informe = await createInforme(req.body);
+    res.send(informe);
   } catch (error) {
     console.log(error);
     res.sendStatus(500);
