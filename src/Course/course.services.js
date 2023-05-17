@@ -1,4 +1,5 @@
 const { PrismaClient } = require("@prisma/client");
+const { NotFoundError } = require("../handlers/AppError");
 const prisma = new PrismaClient();
 const createCourse = async ({
   nombre,
@@ -15,7 +16,7 @@ const createCourse = async ({
     },
   });
   if (!isValidCategorie) {
-    throw new Error("Categoria no es valida");
+    throw NotFoundError.create("Categoria no es valida");
   }
   const isValidInstructor = await prisma.instructor.findUnique({
     where: {
@@ -23,7 +24,7 @@ const createCourse = async ({
     },
   });
   if (!isValidInstructor) {
-    throw new Error("Instructor no es valida");
+    throw NotFoundError.create("Instructor no es valida");
   }
   const curso = await prisma.curso.create({
     data: {
@@ -45,7 +46,7 @@ const getCourseDetail = async (id) => {
     },
   });
   if (!curso) {
-    throw new Error("Curso no encontrado");
+    throw NotFoundError.create("Curso no encontrado");
   }
   return curso;
 };
@@ -56,7 +57,7 @@ const getCoursesByGenre = async (categoria_id) => {
     },
   });
   if (!cursos) {
-    throw new Error("No existen cursos en esta categoria.");
+    throw NotFoundError.create("No existen cursos en esta categoria.");
   }
   return cursos;
 };

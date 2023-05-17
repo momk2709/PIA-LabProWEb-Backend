@@ -1,8 +1,18 @@
 const { PrismaClient } = require("@prisma/client");
 const { encrypt, verify } = require("./utils/bcrypt");
+const { generateToken } = require("./utils/jwt");
+const { UnauthorizedError, NotFoundError } = require("../handlers/AppError");
 const prisma = new PrismaClient();
 const USER_ROL = 2;
 const register = async ({ nombre, email, password }) => {
+  const userExists = await prisma.usuario.findFirst({
+    where: {
+      email,
+    },
+  });
+  if (userExists) {
+    throw UnauthorizedError.create("El usuario ya existe");
+  }
   const hash = await encrypt(password);
   const user = await prisma.usuario.create({
     data: {
@@ -21,12 +31,28 @@ const login = async ({ email, password }) => {
     },
   });
   if (!user) {
-    throw new Error("User not found");
+    throw UnauthorizedError.create("Wrong credentials");
   }
   const isPasswordValid = await verify(password, user.password);
   if (!isPasswordValid) {
-    throw new Error("Invalid password");
+    throw UnauthorizedError.create("Wrong credentials");
   }
-  return user;
+  const token = generateToken(user.id);
+
+  return token;
 };
-module.exports = { register, login };
+const me = async (id) => {
+  const user = await prisma.usuario.findUnique({
+    where: { id },
+  });
+  if (!user) {
+    throw NotFoundError.create("User not found");
+  }
+  return {
+    id: user.id,
+    nombre: user.nombre,
+    email: user.email,
+    rol: user.rol_id,
+  };
+};
+module.exports = { register, login, me };
