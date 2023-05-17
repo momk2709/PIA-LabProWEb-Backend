@@ -52,7 +52,13 @@ const getDetailValidator = [
   param("courseId").isInt().withMessage("El Id de curso es requerida"),
   validationErrors,
 ];
+
+const getCoursesByGenreValidator = [
+  param("genreId").isInt().withMessage("El Id del curso es requerido"),
+  validationErrors,
+];
 module.exports = {
   createValidator,
   getDetailValidator,
+  getCoursesByGenreValidator,
 };

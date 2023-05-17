@@ -1,15 +1,23 @@
-const { createCourse, getCourseDetail } = require("./course.services");
+const {
+  createCourse,
+  getCourseDetail,
+  getCoursesByGenre,
+  getGenres,
+} = require("./course.services");
+
 const getGenresController = async (req, res) => {
   try {
-    res.sendStatus(200);
+    const categorias = await getGenres();
+    res.send(categorias);
   } catch (error) {
     console.log(error);
     res.sendStatus(500);
   }
 };
-const getGenreIdController = async (req, res) => {
+const getCoursesByGenreController = async (req, res) => {
   try {
-    res.sendStatus(200);
+    const cursos = await getCoursesByGenre(parseInt(req.params.genreId));
+    res.send(cursos);
   } catch (error) {
     console.log(error);
     res.sendStatus(500);
@@ -35,7 +43,7 @@ const postCourseController = async (req, res) => {
 };
 module.exports = {
   getGenresController,
-  getGenreIdController,
+  getCoursesByGenreController,
   getCourseIdController,
   postCourseController,
 };

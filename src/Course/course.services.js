@@ -49,4 +49,24 @@ const getCourseDetail = async (id) => {
   }
   return curso;
 };
-module.exports = { createCourse, getCourseDetail };
+const getCoursesByGenre = async (categoria_id) => {
+  const cursos = await prisma.curso.findMany({
+    where: {
+      categoria_id,
+    },
+  });
+  if (!cursos) {
+    throw new Error("No existen cursos en esta categoria.");
+  }
+  return cursos;
+};
+const getGenres = async () => {
+  const categorias = await prisma.categoria.findMany();
+  return categorias;
+};
+module.exports = {
+  createCourse,
+  getCourseDetail,
+  getCoursesByGenre,
+  getGenres,
+};
