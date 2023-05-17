@@ -4,41 +4,41 @@ const {
   getCoursesByGenre,
   getGenres,
 } = require("./course.services");
+const {
+  successResponse,
+  createdResponse,
+} = require("../handlers/responseHandlers");
 
-const getGenresController = async (req, res) => {
+const getGenresController = async (req, res, next) => {
   try {
     const categorias = await getGenres();
-    res.send(categorias);
+    return successResponse({ categorias })(res);
   } catch (error) {
-    console.log(error);
-    res.sendStatus(500);
+    next(error);
   }
 };
-const getCoursesByGenreController = async (req, res) => {
+const getCoursesByGenreController = async (req, res, next) => {
   try {
     const cursos = await getCoursesByGenre(parseInt(req.params.genreId));
-    res.send(cursos);
+    return successResponse({ cursos })(res);
   } catch (error) {
-    console.log(error);
-    res.sendStatus(500);
+    next(error);
   }
 };
-const getCourseIdController = async (req, res) => {
+const getCourseIdController = async (req, res, next) => {
   try {
     const curso = await getCourseDetail(parseInt(req.params.courseId));
-    res.send(curso);
+    return successResponse({ curso })(res);
   } catch (error) {
-    console.error(error);
-    res.send(error.message);
+    next(error);
   }
 };
-const postCourseController = async (req, res) => {
+const postCourseController = async (req, res, next) => {
   try {
-    const course = await createCourse(req.body);
-    res.send(course);
+    const curso = await createCourse(req.body);
+    return createdResponse({ curso })(res);
   } catch (error) {
-    console.error(error);
-    res.send(error.message);
+    next(error);
   }
 };
 module.exports = {
