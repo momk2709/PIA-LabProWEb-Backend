@@ -21,10 +21,6 @@ const createValidator = [
     .isFloat({ min: 0 })
     .withMessage("El precio del curso debe ser mayor o igual a cero"),
 
-  body("instructor_id")
-    .isInt({ min: 1 })
-    .withMessage("El instructor del curso es obligatorio"),
-
   body("fecha_inicio")
     .isISO8601()
     .withMessage(
@@ -49,12 +45,26 @@ const createValidator = [
   validationErrors,
 ];
 const getDetailValidator = [
-  param("courseId").isInt().withMessage("El Id de curso es requerida"),
+  param("courseId")
+    .isInt()
+    .withMessage("El Id de curso es requerida")
+    .custom((value, { req }) => {
+      if (value <= 0) throw new Error("El Id debe ser positivo");
+
+      return true;
+    }),
   validationErrors,
 ];
 
 const getCoursesByGenreValidator = [
-  param("genreId").isInt().withMessage("El Id del curso es requerido"),
+  param("genreId")
+    .isInt()
+    .withMessage("El Id del curso es requerido")
+    .custom((value, { req }) => {
+      if (value <= 0) throw new Error("El Id debe ser positivo");
+
+      return true;
+    }),
   validationErrors,
 ];
 module.exports = {

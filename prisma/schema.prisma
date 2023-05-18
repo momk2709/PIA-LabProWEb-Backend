@@ -15,17 +15,16 @@ model Categoria {
 }
 
 model Curso {
-  id            Int           @id @default(autoincrement())
-  nombre        String        @db.VarChar(255)
-  descripcion   String        @db.VarChar(255)
-  precio        Int
-  fecha_inicio  DateTime      @db.Timestamptz(6)
-  fecha_fin     DateTime      @db.Timestamptz(6)
-  categoria_id  Int
-  instructor_id Int
-  Categoria     Categoria     @relation(fields: [categoria_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  Instructor    Instructor    @relation(fields: [instructor_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  Inscripcion   Inscripcion[]
+  id               Int                @id @default(autoincrement())
+  nombre           String             @db.VarChar(255)
+  descripcion      String             @db.VarChar(255)
+  precio           Int
+  fecha_inicio     DateTime           @db.Timestamptz(6)
+  fecha_fin        DateTime           @db.Timestamptz(6)
+  categoria_id     Int
+  Categoria        Categoria          @relation(fields: [categoria_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Inscripcion      Inscripcion[]
+  Instructor_Curso Instructor_Curso[]
 }
 
 model Factura {
@@ -65,7 +64,7 @@ model Instructor {
   email                  String                   @db.VarChar(255)
   descripcion            String                   @db.VarChar(255)
   telefono               String                   @db.VarChar(255)
-  Curso                  Curso[]
+  Instructor_Curso       Instructor_Curso[]
   Instructorcalificacion Instructorcalificacion[]
 }
 
@@ -102,4 +101,13 @@ model Usuario {
   Inscripcion            Inscripcion[]
   Instructorcalificacion Instructorcalificacion[]
   Rol                    Rol                      @relation(fields: [rol_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model Instructor_Curso {
+  id            Int        @id @default(autoincrement())
+  instructor_id Int
+  curso_id      Int
+  fecha_inicio  DateTime   @default(now()) @db.Timestamptz(6)
+  Curso         Curso      @relation(fields: [curso_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  Instructor    Instructor @relation(fields: [instructor_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }

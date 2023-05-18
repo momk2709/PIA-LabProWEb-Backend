@@ -6,7 +6,6 @@ const createCourse = async ({
   categoria_id,
   descripcion,
   precio,
-  instructor_id,
   fecha_inicio,
   fecha_fin,
 }) => {
@@ -18,21 +17,13 @@ const createCourse = async ({
   if (!isValidCategorie) {
     throw NotFoundError.create("Categoria no es valida");
   }
-  const isValidInstructor = await prisma.instructor.findUnique({
-    where: {
-      id: instructor_id,
-    },
-  });
-  if (!isValidInstructor) {
-    throw NotFoundError.create("Instructor no es valida");
-  }
+
   const curso = await prisma.curso.create({
     data: {
       nombre,
       categoria_id,
       descripcion,
       precio,
-      instructor_id,
       fecha_inicio,
       fecha_fin,
     },

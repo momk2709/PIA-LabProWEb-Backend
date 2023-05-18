@@ -1,5 +1,4 @@
 const express = require("express");
-const router = express.Router();
 const {
   createValidator,
   getDetailValidator,
@@ -11,6 +10,7 @@ const {
   getCourseIdController,
   postCourseController,
 } = require("./course.controller");
+const router = express.Router();
 
 router.get("/genres", getGenresController);
 router.get(
