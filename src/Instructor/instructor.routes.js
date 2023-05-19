@@ -2,6 +2,7 @@ const express = require("express");
 const {
   createInstructorValidator,
   getInstructorValidator,
+  instructorCourseValidator,
 } = require("./instructor.middleware");
 const {
   createInstructorController,
@@ -9,6 +10,7 @@ const {
   getInstructorDetailController,
   updateInstructorController,
   deleteInstructorController,
+  addInstructorToCourseController,
 } = require("./instructor.controller");
 const router = express.Router();
 
@@ -29,6 +31,11 @@ router.delete(
   "/:instructorId",
   getInstructorValidator,
   deleteInstructorController
+);
+router.post(
+  "/curso",
+  instructorCourseValidator,
+  addInstructorToCourseController
 );
 
 module.exports = router;

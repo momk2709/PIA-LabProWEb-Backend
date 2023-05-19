@@ -33,4 +33,27 @@ const getInstructorValidator = [
     }),
   validationErrors,
 ];
-module.exports = { createInstructorValidator, getInstructorValidator };
+const instructorCourseValidator = [
+  body("instructorId")
+    .isInt()
+    .withMessage("Se requiere Id valido")
+    .custom((value, { req }) => {
+      if (value <= 0) throw new Error("El Id debe ser positivo");
+
+      return true;
+    }),
+  body("cursoId")
+    .isInt()
+    .withMessage("Se requiere Id valido")
+    .custom((value, { req }) => {
+      if (value <= 0) throw new Error("El Id debe ser positivo");
+
+      return true;
+    }),
+  validationErrors,
+];
+module.exports = {
+  createInstructorValidator,
+  getInstructorValidator,
+  instructorCourseValidator,
+};

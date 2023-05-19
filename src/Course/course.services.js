@@ -56,9 +56,56 @@ const getGenres = async () => {
   const categorias = await prisma.categoria.findMany();
   return categorias;
 };
+const getAllCourses = async () => {
+  const cursos = await prisma.curso.findMany();
+  return cursos;
+};
+const updateCourse = async (
+  { nombre, categoria_id, descripcion, precio, fecha_inicio, fecha_fin },
+  id
+) => {
+  const isCursoValid = await prisma.curso.findUnique({
+    where: {
+      id,
+    },
+  });
+  if (!isCursoValid) {
+    throw NotFoundError.create("No se encontro el curso");
+  }
+  const isValidCategorie = await prisma.categoria.findUnique({
+    where: { id: categoria_id },
+  });
+  if (!isValidCategorie) {
+    throw NotFoundError.create("No se encontro la categoria");
+  }
+  const updatedCourse = await prisma.curso.update({
+    where: { id },
+    data: {
+      nombre,
+      categoria_id,
+      descripcion,
+      precio,
+      fecha_inicio,
+      fecha_fin,
+    },
+  });
+  return updatedCourse;
+};
+const deleteCourse = async (id) => {
+  const deletedCourse = await prisma.curso.delete({
+    where: { id },
+  });
+  if (!deletedCourse) {
+    throw NotFoundError.create("No se encontro el curso");
+  }
+  return deletedCourse;
+};
 module.exports = {
   createCourse,
   getCourseDetail,
   getCoursesByGenre,
   getGenres,
+  getAllCourses,
+  updateCourse,
+  deleteCourse,
 };

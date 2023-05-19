@@ -62,10 +62,32 @@ const deleteInstructor = async (id) => {
   }
   return deletedInstructor;
 };
+const addInstructorCourse = async (instructorId, cursoId) => {
+  const isValidInstructor = await prisma.instructor.findUnique({
+    where: { id: instructorId },
+  });
+  if (!isValidInstructor) {
+    throw NotFoundError.create("No se encontro instructor");
+  }
+  const isValidCurso = await prisma.curso.findUnique({
+    where: { id: cursoId },
+  });
+  if (!isValidCurso) {
+    throw NotFoundError.create("No se encontro curso");
+  }
+  const instructorCurso = await prisma.instructor_Curso.create({
+    data: {
+      instructor_id: instructorId,
+      curso_id: cursoId,
+    },
+  });
+  return instructorCurso;
+};
 module.exports = {
   createInstructor,
   getAllInstructor,
   getInstructorDetail,
   updateInstructor,
   deleteInstructor,
+  addInstructorCourse,
 };

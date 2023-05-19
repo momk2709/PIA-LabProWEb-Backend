@@ -9,6 +9,9 @@ const {
   getCoursesByGenreController,
   getCourseIdController,
   postCourseController,
+  getAllCoursesController,
+  updateCourseController,
+  deleteCourseController,
 } = require("./course.controller");
 const router = express.Router();
 
@@ -20,5 +23,13 @@ router.get(
 );
 router.get("/:courseId", getDetailValidator, getCourseIdController);
 router.post("/", createValidator, postCourseController);
+router.get("/", getAllCoursesController);
+router.put(
+  "/:courseId",
+  getDetailValidator,
+  createValidator,
+  updateCourseController
+);
+router.delete("/:courseId", getDetailValidator, deleteCourseController);
 
 module.exports = router;

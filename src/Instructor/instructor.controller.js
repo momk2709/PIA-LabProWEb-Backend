@@ -1,10 +1,10 @@
-const { parse } = require("dotenv");
 const {
   createInstructor,
   getAllInstructor,
   getInstructorDetail,
   updateInstructor,
   deleteInstructor,
+  addInstructorCourse,
 } = require("./instructor.services");
 const {
   successResponse,
@@ -53,16 +53,27 @@ const updateInstructorController = async (req, res, next) => {
 const deleteInstructorController = async (req, res, next) => {
   try {
     await deleteInstructor(parseInt(req.params.instructorId));
-    return noContentResponse()(res);
+    return noContentResponse("Instructor eliminada con exito!")(res);
   } catch (error) {
     next(error);
   }
 };
-
+const addInstructorToCourseController = async (req, res, next) => {
+  try {
+    const asignarInstructorCurso = await addInstructorCourse(
+      Number(req.body.instructorId),
+      Number(req.body.cursoId)
+    );
+    return createdResponse({ asignarInstructorCurso })(res);
+  } catch (error) {
+    next(error);
+  }
+};
 module.exports = {
   createInstructorController,
   getAllInstructorsController,
   getInstructorDetailController,
   updateInstructorController,
   deleteInstructorController,
+  addInstructorToCourseController,
 };
