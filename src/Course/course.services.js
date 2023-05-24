@@ -35,11 +35,39 @@ const getCourseDetail = async (id) => {
     where: {
       id,
     },
+    include: {
+      Instructor_Curso: {
+        include: {
+          Instructor: true,
+        },
+      },
+    },
   });
   if (!curso) {
     throw NotFoundError.create("Curso no encontrado");
   }
-  return curso;
+
+  const datosCurso = {
+    id: curso.id,
+    nombre: curso.nombre,
+    descripcion: curso.descripcion,
+    precio: curso.precio,
+    fecha_inicio: curso.fecha_inicio,
+    fecha_fin: curso.fecha_fin,
+    categoria_id: curso.categoria_id,
+  };
+
+  const instructores = curso.Instructor_Curso.map((instructorCurso) => {
+    const instructor = instructorCurso.Instructor;
+    return {
+      id: instructor.id,
+      nombre: instructor.nombre,
+      email: instructor.email,
+      descripcion: instructor.descripcion,
+      telefono: instructor.telefono,
+    };
+  });
+  return { datosCurso, instructores };
 };
 const getCoursesByGenre = async (categoria_id) => {
   const cursos = await prisma.curso.findMany({

@@ -33,7 +33,7 @@ router.delete(
   deleteInstructorController
 );
 router.post(
-  "/curso",
+  "/course",
   instructorCourseValidator,
   addInstructorToCourseController
 );

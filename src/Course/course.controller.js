@@ -32,7 +32,7 @@ const getCoursesByGenreController = async (req, res, next) => {
 const getCourseIdController = async (req, res, next) => {
   try {
     const curso = await getCourseDetail(parseInt(req.params.courseId));
-    return successResponse({ curso })(res);
+    return successResponse(curso)(res);
   } catch (error) {
     next(error);
   }
