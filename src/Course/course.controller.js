@@ -24,7 +24,7 @@ const getGenresController = async (req, res, next) => {
 const getCoursesByGenreController = async (req, res, next) => {
   try {
     const cursos = await getCoursesByGenre(parseInt(req.params.genreId));
-    return successResponse({ cursos })(res);
+    return successResponse(cursos)(res);
   } catch (error) {
     next(error);
   }
