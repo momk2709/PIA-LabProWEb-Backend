@@ -11,6 +11,7 @@ model Categoria {
   id          Int     @id @default(autoincrement())
   nombre      String  @db.VarChar(255)
   descripcion String  @db.VarChar(255)
+  imagenUrl   String? @db.VarChar(255)
   Curso       Curso[]
 }
 
@@ -22,7 +23,7 @@ model Curso {
   fecha_inicio     DateTime           @db.Timestamptz(6)
   fecha_fin        DateTime           @db.Timestamptz(6)
   categoria_id     Int
-  Categoria        Categoria          @relation(fields: [categoria_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Categoria        Categoria          @relation(fields: [categoria_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
   Inscripcion      Inscripcion[]
   Instructor_Curso Instructor_Curso[]
 }
@@ -35,8 +36,8 @@ model Factura {
   status_factura_id Int
   rfc               String         @db.VarChar(255)
   precio            Int
-  Status_Factura    Status_Factura @relation(fields: [status_factura_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  Inscripcion       Inscripcion    @relation(fields: [usuario_id, curso_id], references: [usuario_id, curso_id], onDelete: NoAction, onUpdate: NoAction)
+  Status_Factura    Status_Factura @relation(fields: [status_factura_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  Inscripcion       Inscripcion    @relation(fields: [usuario_id, curso_id], references: [usuario_id, curso_id], onDelete: Cascade, onUpdate: NoAction)
 }
 
 model Informe {
@@ -52,8 +53,8 @@ model Inscripcion {
   curso_id          Int
   fecha_inscripcion DateTime  @default(now()) @db.Timestamptz(6)
   Factura           Factura[]
-  Curso             Curso     @relation(fields: [curso_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  Usuario           Usuario   @relation(fields: [usuario_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Curso             Curso     @relation(fields: [curso_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  Usuario           Usuario   @relation(fields: [usuario_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@id([usuario_id, curso_id])
 }
@@ -72,8 +73,8 @@ model Instructorcalificacion {
   usuario_id    Int
   instructor_id Int
   calificacion  Float
-  Instructor    Instructor @relation(fields: [instructor_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  Usuario       Usuario    @relation(fields: [usuario_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Instructor    Instructor @relation(fields: [instructor_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  Usuario       Usuario    @relation(fields: [usuario_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@id([usuario_id, instructor_id])
 }
@@ -100,7 +101,7 @@ model Usuario {
   rol_id                 Int
   Inscripcion            Inscripcion[]
   Instructorcalificacion Instructorcalificacion[]
-  Rol                    Rol                      @relation(fields: [rol_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Rol                    Rol                      @relation(fields: [rol_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
 model Instructor_Curso {

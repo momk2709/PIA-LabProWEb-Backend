@@ -74,11 +74,32 @@ const getCoursesByGenre = async (categoria_id) => {
     where: {
       categoria_id,
     },
+    include: {
+      Categoria: true,
+    },
   });
   if (!cursos) {
     throw NotFoundError.create("No existen cursos en esta categoria.");
   }
-  return cursos;
+
+  const cleanData = {
+    categoria: {
+      nombre: cursos[0].Categoria.nombre,
+      descripcion: cursos[0].Categoria.descripcion,
+      imagenUrl: cursos[0].Categoria.imagenUrl,
+    },
+    cursos: cursos.map((curso) => {
+      return {
+        id: curso.id,
+        nombre: curso.nombre,
+        descripcion: curso.descripcion,
+        precio: curso.precio,
+        fechaInicio: curso.fecha_inicio,
+        fechaFin: curso.fecha_fin,
+      };
+    }),
+  };
+  return cleanData;
 };
 const getGenres = async () => {
   const categorias = await prisma.categoria.findMany();
