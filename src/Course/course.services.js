@@ -84,6 +84,7 @@ const getCoursesByGenre = async (categoria_id) => {
 
   const cleanData = {
     categoria: {
+      id: cursos[0].Categoria.id,
       nombre: cursos[0].Categoria.nombre,
       descripcion: cursos[0].Categoria.descripcion,
       imagenUrl: cursos[0].Categoria.imagenUrl,
