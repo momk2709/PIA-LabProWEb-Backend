@@ -6,10 +6,6 @@ const createValidator = [
     .notEmpty()
     .withMessage("El nombre del curso es obligatorio"),
 
-  body("categoria_id")
-    .isInt({ min: 1 })
-    .withMessage("La categoría del curso es obligatoria"),
-
   body("descripcion")
     .trim()
     .notEmpty()
