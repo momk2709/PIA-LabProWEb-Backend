@@ -100,6 +100,7 @@ const getCoursesByGenre = async (categoria_id) => {
       };
     }),
   };
+
   return cleanData;
 };
 const getGenres = async () => {
