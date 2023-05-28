@@ -26,6 +26,11 @@ const getCourseDetail = async (id) => {
       id,
     },
     include: {
+      Categoria_Curso: {
+        include: {
+          Categoria: true,
+        },
+      },
       Instructor_Curso: {
         include: {
           Instructor: true,
@@ -45,6 +50,7 @@ const getCourseDetail = async (id) => {
     fecha_inicio: isCurso.fecha_inicio,
     fecha_fin: isCurso.fecha_fin,
     categoria_id: isCurso.categoria_id,
+    imagenUrl: isCurso.Categoria_Curso[0].Categoria.imagenUrl,
   };
 
   const instructores = isCurso.Instructor_Curso.map((instructorCurso) => {
@@ -58,6 +64,7 @@ const getCourseDetail = async (id) => {
       imagenUrl: instructor.imagenUrl,
     };
   });
+
   return { curso, instructores };
 };
 const getCoursesByGenre = async (categoria_id) => {

@@ -44,6 +44,9 @@ const login = async ({ email, password }) => {
 const me = async (id) => {
   const user = await prisma.usuario.findUnique({
     where: { id },
+    include: {
+      Rol: true,
+    },
   });
   if (!user) {
     throw NotFoundError.create("User not found");
@@ -52,7 +55,7 @@ const me = async (id) => {
     id: user.id,
     nombre: user.nombre,
     email: user.email,
-    rol: user.rol_id,
+    rol: user.Rol.nombre,
   };
 };
 module.exports = { register, login, me };
