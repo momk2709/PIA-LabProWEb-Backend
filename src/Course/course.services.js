@@ -64,7 +64,6 @@ const getCourseDetail = async (id) => {
       imagenUrl: instructor.imagenUrl,
     };
   });
-
   return { curso, instructores };
 };
 const getCoursesByGenre = async (categoria_id) => {

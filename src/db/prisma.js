@@ -13,4 +13,4 @@ const checkConnection = async () => {
   }
 };
 
-module.exports = { checkConnection };
+module.exports = { checkConnection, prisma };
