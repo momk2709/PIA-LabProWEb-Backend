@@ -1,34 +1,48 @@
-const { PrismaClient } = require("@prisma/client");
+const { prisma } = require("../db/prisma");
 const { NotFoundError } = require("../handlers/AppError");
-const prisma = new PrismaClient();
 
-const getUser = async (userId) => {
+const getUserProfile = async (userId) => {
   const user = await prisma.usuario.findUnique({
     where: {
       id: userId,
     },
-    include: {
-      Inscripcion: true,
-    },
   });
-  if (!user) {
-    throw NotFoundError.create("El usuario no se encontro");
-  }
-  return user;
-};
-const getUserFactura = async (userId) => {
-  const factura = await prisma.usuario.findUnique({
+
+  if (!user) throw NotFoundError.create("User not found");
+
+  const inscripcion = await prisma.inscripcion.findMany({
     where: {
-      id: userId,
+      usuario_id: userId,
     },
     include: {
-      Inscripcion: {},
+      Curso: true,
     },
   });
-  if (!factura) {
-    throw NotFoundError.create("El usuario no se encontro");
-  }
-  return factura;
+
+  const userFacturas = await prisma.factura.findMany({
+    where: {
+      usuario_id: userId,
+    },
+    include: {
+      Status_Factura: true,
+    },
+  });
+
+  const facturas = userFacturas.map((factura) => {
+    return {
+      id: factura.id,
+      fecha: factura.fecha,
+      status: factura.Status_Factura.nombre,
+      precio: factura.precio,
+    };
+  });
+
+  const cursos = inscripcion.map((inscripcion) => inscripcion.Curso);
+
+  return {
+    cursos,
+    facturas,
+  };
 };
 
-module.exports = { getUser, getUserFactura };
+module.exports = { getUserProfile };
