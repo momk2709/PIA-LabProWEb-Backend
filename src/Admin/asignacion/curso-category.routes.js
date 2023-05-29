@@ -63,6 +63,27 @@ router.get("/curso-category", async (req, res, next) => {
 
 router.post("/curso-category", bodyValidation, async ({ body }, res, next) => {
   try {
+    const [isCategory, isCurso] = await prisma.$transaction([
+      prisma.categoria.findUnique({
+        where: {
+          id: body.categoria_id,
+        },
+      }),
+      prisma.curso.findUnique({
+        where: {
+          id: body.curso_id,
+        },
+      }),
+    ]);
+
+    if (!isCategory) {
+      throw NotFoundError.create("This category does not exist");
+    }
+
+    if (!isCurso) {
+      throw NotFoundError.create("This curso does not exist");
+    }
+
     const isValid = await prisma.categoria_Curso.findUnique({
       where: {
         categoria_id_curso_id: {
@@ -94,6 +115,27 @@ router.delete(
   bodyValidation,
   async ({ body }, res, next) => {
     try {
+      const [isCategory, isCurso] = await prisma.$transaction([
+        prisma.categoria.findUnique({
+          where: {
+            id: body.categoria_id,
+          },
+        }),
+        prisma.curso.findUnique({
+          where: {
+            id: body.curso_id,
+          },
+        }),
+      ]);
+
+      if (!isCategory) {
+        throw NotFoundError.create("This category does not exist");
+      }
+
+      if (!isCurso) {
+        throw NotFoundError.create("This curso does not exist");
+      }
+
       const isValid = await prisma.categoria_Curso.findUnique({
         where: {
           categoria_id_curso_id: {

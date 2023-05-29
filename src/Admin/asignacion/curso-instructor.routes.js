@@ -69,6 +69,26 @@ router.post(
   bodyValidation,
   async ({ body }, res, next) => {
     try {
+      const [isInstructor, isCurso] = await prisma.$transaction([
+        prisma.instructor.findUnique({
+          where: {
+            id: body.instructor_id,
+          },
+        }),
+        prisma.curso.findUnique({
+          where: {
+            id: body.curso_id,
+          },
+        }),
+      ]);
+
+      if (!isInstructor) {
+        throw NotFoundError.create("Instructor not found");
+      }
+
+      if (!isCurso) {
+        throw NotFoundError.create("Curso not found");
+      }
       const isValid = await prisma.instructor_Curso.findUnique({
         where: {
           instructor_id_curso_id: {
@@ -101,6 +121,27 @@ router.post(
 
 router.delete("/curso-instructor", bodyValidation, async (req, res, next) => {
   try {
+    const [isInstructor, isCurso] = await prisma.$transaction([
+      prisma.instructor.findUnique({
+        where: {
+          id: req.body.instructor_id,
+        },
+      }),
+      prisma.curso.findUnique({
+        where: {
+          id: req.body.curso_id,
+        },
+      }),
+    ]);
+
+    if (!isInstructor) {
+      throw NotFoundError.create("Instructor not found");
+    }
+
+    if (!isCurso) {
+      throw NotFoundError.create("Curso not found");
+    }
+
     const isValid = await prisma.instructor_Curso.findUnique({
       where: {
         instructor_id_curso_id: {
