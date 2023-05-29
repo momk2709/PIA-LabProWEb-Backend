@@ -7,4 +7,5 @@ router.use(checkJWT);
 router.use(isAdmin);
 
 router.use("/", require("./courses"));
+router.use("/", require("./instructors"));
 module.exports = router;
