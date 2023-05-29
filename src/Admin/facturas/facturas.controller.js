@@ -1,15 +1,20 @@
 const { successResponse } = require("../../handlers/responseHandlers");
+const { getAllFacturas, updateFactura } = require("./facturas.services");
 
 const getAllFacturasController = async (req, res, next) => {
   try {
-    res.sendStatus(200);
+    const facturas = await getAllFacturas();
+
+    return successResponse({ facturas }, "All facturas")(res);
   } catch (error) {
     next(error);
   }
 };
 const updateFacturaController = async (req, res, next) => {
   try {
-    res.sendStatus(200);
+    const factura = await updateFactura(Number(req.params.id), req.body);
+
+    return successResponse({ factura }, "Factura updated")(res);
   } catch (error) {
     next(error);
   }
