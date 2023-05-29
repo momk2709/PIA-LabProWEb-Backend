@@ -8,6 +8,6 @@ router.use("/course", require("./Course"));
 router.use("/instructor", require("./Instructor"));
 
 router.use("/user", require("./Usuario"));
-
+router.use("/factura", require("./Factura"));
 
 module.exports = router;
