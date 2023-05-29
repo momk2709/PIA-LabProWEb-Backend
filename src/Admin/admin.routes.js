@@ -11,4 +11,5 @@ router.use("/", require("./instructors"));
 router.use("/", require("./users"));
 router.use("/", require("./categorias"));
 router.use("/", require("./informes"));
+router.use("/", require("./asignacion"));
 module.exports = router;
