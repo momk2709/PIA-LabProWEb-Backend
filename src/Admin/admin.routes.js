@@ -8,4 +8,5 @@ router.use(isAdmin);
 
 router.use("/", require("./courses"));
 router.use("/", require("./instructors"));
+router.use("/", require("./users"));
 module.exports = router;
