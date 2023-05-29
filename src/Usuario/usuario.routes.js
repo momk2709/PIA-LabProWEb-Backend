@@ -2,11 +2,13 @@ const express = require("express");
 const router = express.Router();
 const checkJWT = require("../middlewares/session.middleware");
 const {
-  getUsuarioController,
-  getFacturaController,
-} = require("./instructor.controller");
+  getUserController,
+  getUserFacturaController,
+  getUserCourseController,
+} = require("./usuario.controller");
 
-router.get("/", checkJWT, getUsuarioController);
-router.get("/factura", getFacturaController);
+router.get("/", checkJWT, getUserController);
+router.get("/factura", checkJWT, getUserFacturaController);
+router.get("/course", checkJWT, getUserCourseController);
 
 module.exports = router;

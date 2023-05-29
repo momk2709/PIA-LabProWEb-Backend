@@ -2,8 +2,8 @@ const { PrismaClient } = require("@prisma/client");
 const { NotFoundError } = require("../handlers/AppError");
 const prisma = new PrismaClient();
 
-const getUsuario = async (userId) => {
-  const usuario = await prisma.usuario.findUnique({
+const getUser = async (userId) => {
+  const user = await prisma.usuario.findUnique({
     where: {
       id: userId,
     },
@@ -11,31 +11,24 @@ const getUsuario = async (userId) => {
       Inscripcion: true,
     },
   });
-  if (!usuario) {
-    throw NotFoundError.create("Usuario no existe");
+  if (!user) {
+    throw NotFoundError.create("El usuario no se encontro");
   }
-  return getUsuario;
+  return user;
 };
-
-const getFactura = async (userId) => {
+const getUserFactura = async (userId) => {
   const factura = await prisma.usuario.findUnique({
-    where: { id: userId },
+    where: {
+      id: userId,
+    },
     include: {
-      Inscripcion: {
-        include: {
-          Factura: {
-            include: {
-              Status_Factura: true,
-            },
-          },
-        },
-      },
+      Inscripcion: {},
     },
   });
   if (!factura) {
-    throw NotFoundError.create("Usuario no existe");
+    throw NotFoundError.create("El usuario no se encontro");
   }
-  return getFactura;
+  return factura;
 };
 
-module.exports = { getUsuario, getFactura };
+module.exports = { getUser, getUserFactura };
