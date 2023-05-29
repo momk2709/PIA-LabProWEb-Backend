@@ -11,4 +11,5 @@ const createInforme = async ({ nombre, telefono, email, mensaje }) => {
   });
   return informe;
 };
+
 module.exports = createInforme;

@@ -1,20 +1,26 @@
 const express = require("express");
-const router = express.Router();
+const {
+  updateBodyValidator,
+  createBodyValidator,
+  paramValidator,
+} = require("./users.validator");
 const {
   getAllUsersController,
   createUserController,
-  updateUserController,
   deleteUserController,
+  updateUserController,
 } = require("./users.controller");
-const {
-  createUserValidation,
-  updateUserValidator,
-  paramValidator,
-} = require("./users.validator");
+
+const router = express.Router();
 
 router.get("/users", getAllUsersController);
-router.post("/users", createUserController);
-router.put("/users/:id", updateUserController);
-router.delete("/users/:id", deleteUserController);
+router.post("/users", createBodyValidator, createUserController);
+router.put(
+  "/users/:id",
+  paramValidator,
+  updateBodyValidator,
+  updateUserController
+);
+router.delete("/users/:id", paramValidator, deleteUserController);
 
 module.exports = router;
