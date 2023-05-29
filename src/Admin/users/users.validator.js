@@ -51,3 +51,4 @@ const paramValidator = [
 ];
 
 module.exports = { createBodyValidator, updateBodyValidator, paramValidator };
+
