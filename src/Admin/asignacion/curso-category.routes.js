@@ -11,6 +11,29 @@ const express = require("express");
 
 const router = express.Router();
 
+const bodyValidation = [
+  body("categoria_id")
+    .isInt()
+    .custom((value) => {
+      if (value <= 0) {
+        throw new Error("categoria_id must be greater than 0");
+      }
+
+      return true;
+    }),
+  body("curso_id")
+    .isInt()
+    .custom((value) => {
+      if (value <= 0) {
+        throw new Error("curso_id must be greater than 0");
+      }
+
+      return true;
+    }),
+
+  validationErrors,
+];
+
 router.get("/curso-category", async (req, res, next) => {
   try {
     const cursoCategory = await prisma.categoria_Curso.findMany({
@@ -84,7 +107,7 @@ router.delete(
         throw NotFoundError.create("This curso is not assigned");
       }
 
-      const cursoCategory = await prisma.categoria_Curso.delete({
+      await prisma.categoria_Curso.delete({
         where: {
           categoria_id_curso_id: {
             categoria_id: body.categoria_id,
@@ -100,26 +123,4 @@ router.delete(
   }
 );
 
-const bodyValidation = [
-  body("categoria_id")
-    .isInt()
-    .custom((value) => {
-      if (value <= 0) {
-        throw new Error("categoria_id must be greater than 0");
-      }
-
-      return true;
-    }),
-  body("curso_id")
-    .isInt()
-    .custom((value) => {
-      if (value <= 0) {
-        throw new Error("curso_id must be greater than 0");
-      }
-
-      return true;
-    }),
-
-  validationErrors,
-];
 module.exports = router;
