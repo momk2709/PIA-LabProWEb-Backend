@@ -7,4 +7,7 @@ router.use("/informe", require("./Informe"));
 router.use("/course", require("./Course"));
 router.use("/instructor", require("./Instructor"));
 
+router.use("/user", require("./Usuario"));
+
+
 module.exports = router;
