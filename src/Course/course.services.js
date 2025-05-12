@@ -76,11 +76,11 @@ const getCoursesByGenre = async (categoria_id) => {
   if (!isValidGenre) {
     throw NotFoundError.create("Categoria no encontrada");
   }
+
   const cursos = await prisma.categoria_Curso.findMany({
     where: {
       categoria_id,
     },
-
     include: {
       Curso: true,
       Categoria: true,
@@ -89,21 +89,19 @@ const getCoursesByGenre = async (categoria_id) => {
 
   const cleanData = {
     categoria: {
-      id: cursos[0].Categoria.id,
-      nombre: cursos[0].Categoria.nombre,
-      descripcion: cursos[0].Categoria.descripcion,
-      imagenUrl: cursos[0].Categoria.imagenUrl,
+      id: isValidGenre.id,
+      nombre: isValidGenre.nombre,
+      descripcion: isValidGenre.descripcion,
+      imagenUrl: isValidGenre.imagenUrl,
     },
-    cursos: cursos.map((curso) => {
-      return {
-        id: curso.Curso.id,
-        nombre: curso.Curso.nombre,
-        descripcion: curso.Curso.descripcion,
-        precio: curso.Curso.precio,
-        fechaInicio: curso.Curso.fecha_inicio,
-        fechaFin: curso.Curso.fecha_fin,
-      };
-    }),
+    cursos: cursos.map((curso) => ({
+      id: curso.Curso.id,
+      nombre: curso.Curso.nombre,
+      descripcion: curso.Curso.descripcion,
+      precio: curso.Curso.precio,
+      fechaInicio: curso.Curso.fecha_inicio,
+      fechaFin: curso.Curso.fecha_fin,
+    })),
   };
 
   return cleanData;
